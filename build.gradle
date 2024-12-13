@@ -4,6 +4,7 @@ buildscript {
     }
 }
 plugins {
+    id 'base'
     id 'java'
     id 'war'
     id 'org.springframework.boot' version '2.7.8'

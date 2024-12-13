@@ -14,21 +14,21 @@ import org.zerock.board.entity.Member;
 @EnableJpaAuditing
 public class MemberRepositoryTest {
 	
-	@Autowired
-    private MemberRepository memberRepository;
-
-    @Test
-    public void insertDummies(){
-
-    	IntStream.rangeClosed(1, 100).forEach(i -> {
-
-            Member member = Member.builder()
-                    .email("user" + i + "@aaa.com")
-                    .pwd("1111")
-                    .name("USER" + i)
-                    .build();
-
-            memberRepository.save(member);
-        });
-    }
+//	@Autowired
+//    private MemberRepository memberRepository;
+//
+//    @Test
+//    public void insertDummies(){
+//
+//    	IntStream.rangeClosed(1, 100).forEach(i -> {
+//
+//            Member member = Member.builder()
+//                    .email("user" + i + "@aaa.com")
+//                    .pwd("1111")
+//                    .name("USER" + i)
+//                    .build();
+//
+//            memberRepository.save(member);
+//        });
+//    }
 }

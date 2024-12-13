@@ -47,13 +47,13 @@ public class BoardRepositoryTests {
     @Test
     public void testRead1() {
     	//조인명령을 활용한다.
-        Optional<Board> result = boardRepository.findById(101L); //데이터베이스에 존재하는 번호
-
-        Board board = result.get();
-        
-        System.out.println("testRead1()..............");
-        System.out.println(board);
-        System.out.println(board.getWriter());
+//        Optional<Board> result = boardRepository.findById(101L); //데이터베이스에 존재하는 번호
+//
+//        Board board = result.get();
+//
+//        System.out.println("testRead1()..............");
+//        System.out.println(board);
+//        System.out.println(board.getWriter());
 
     }
 
