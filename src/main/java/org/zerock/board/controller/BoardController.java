@@ -22,21 +22,17 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 
 @Controller
-@RequestMapping("/board/*")
+@RequestMapping("/board/")
 @Log4j2
 @RequiredArgsConstructor
 public class BoardController {
 
     private final BoardService boardService;
 
-   @GetMapping({"/", "/list"})
-   public String index() {
-       log.info("list...............");
-       return "/board/list";
+   @GetMapping("/list")
+   public void list(Model model){
+
    }
-//   public void list(Model model){
-//
-//   }
 
     @GetMapping("/register")
     public void register(){

@@ -15,7 +15,7 @@ import com.querydsl.core.types.Predicate;
 
 import java.util.List;
 
-public interface BoardRepository extends JpaRepository<Board, Long>, QuerydslPredicateExecutor<Board> {
+public interface BoardRepository extends JpaRepository<Board, Long> {
 
 	 @Query("select b, w from Board b left join b.writer w where b.bno =:bno")
 	 Object getBoardWithWriter(@Param("bno") Long bno);
