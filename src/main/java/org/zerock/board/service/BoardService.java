@@ -1,8 +1,5 @@
 package org.zerock.board.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.zerock.board.dto.PageResultDTO;
 import org.zerock.board.dto.PageRequestDTO;
 import org.zerock.board.dto.BoardDTO;
@@ -13,7 +10,7 @@ public interface BoardService {
 
     Long register(BoardDTO dto);
 
-    //void modify(BoardDTO boardDTO);
+    void modify(BoardDTO dto);
 
     default Board dtoToEntity(BoardDTO dto){
 
@@ -46,4 +43,8 @@ public interface BoardService {
     }
 
     PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO);
+
+    BoardDTO get(Long bno);
+
+    void removeWithReplies(Long bno);
 }
