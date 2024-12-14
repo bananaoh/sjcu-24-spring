@@ -1,6 +1,10 @@
 package org.zerock.board.service;
 
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.zerock.board.dto.PageResultDTO;
+import org.zerock.board.dto.PageRequestDTO;
 import org.zerock.board.dto.BoardDTO;
 import org.zerock.board.entity.Board;
 import org.zerock.board.entity.Member;
@@ -40,4 +44,6 @@ public interface BoardService {
         return boardDTO;
 
     }
+
+    PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO);
 }
