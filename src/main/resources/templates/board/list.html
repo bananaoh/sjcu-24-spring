@@ -22,10 +22,10 @@
                     <select class="custom-select" name="type">
                         <option th:selected="${pageRequestDTO.type == null}">-------</option>
                         <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
-                        <option value="t" th:selected="${pageRequestDTO.type =='c'}"  >내용</option>
-                        <option value="t"  th:selected="${pageRequestDTO.type =='w'}" >작성자</option>
-                        <option value="tc"  th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
-                        <option value="tcw"  th:selected="${pageRequestDTO.type =='tcw'}" >제목 + 내용 + 작성자</option>
+                        <option value="c" th:selected="${pageRequestDTO.type =='c'}" >내용</option>
+                        <option value="w" th:selected="${pageRequestDTO.type =='w'}" >작성자</option>
+                        <option value="tc" th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
+                        <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}" >제목 + 내용 + 작성자</option>
                     </select>
                 </div>
                 <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
@@ -41,33 +41,28 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Writer</th>
-                <th scope="col">Regdate</th>
+                <th scope="col" class="text-center">번호</th>
+                <th scope="col" class="text-center">제목</th>
+                <th scope="col" class="text-center">작성자</th>
+                <th scope="col" class="text-center">작성일</th>
             </tr>
             </thead>
             <tbody>
 
             <tr th:each="dto : ${result.dtoList}" >
-                <th scope="row">
-                    <a th:href="@{/board/read(bno = ${dto.bno},
-                    page= ${result.page},
-                    type=${pageRequestDTO.type} ,
-                    keyword = ${pageRequestDTO.keyword})}">
+                <td scope="row" class="text-center">
                         [[${dto.bno}]]
-                    </a>
-                </th>
+                </td>
                 <td>
                   <a th:href="@{/board/read(bno = ${dto.bno},
                   page= ${result.page},
                   type=${pageRequestDTO.type} ,
                   keyword = ${pageRequestDTO.keyword})}">
-                  [[${dto.title}]] ----------------  [<b th:text="${dto.replyCount}"></b>]
+                  [[${dto.title}]] [<b th:text="${dto.replyCount}"></b>]
                 </a>
                 </td>
-                <td>[[${dto.writerName}]] <small>[[${dto.writerEmail}]]</small> </td>
-                <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                <td class="text-center">[[${dto.writerName}]] <small>[[${dto.writerEmail}]]</small> </td>
+                <td class="text-center">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
             </tr>
 
 
@@ -121,29 +116,17 @@
         </div>
 
         <script th:inline="javascript">
+            var searchForm = $("#searchForm");
 
-            // var msg = [[${msg}]];
+            $('.btn-search').click(function(e){
+                searchForm.submit();
+            });
 
-            // console.log(msg);
-
-            // if(msg){
-            //     $(".modal").modal();
-            // }
-            // var searchForm = $("#searchForm");
-
-            // $('.btn-search').click(function(e){
-
-            //     searchForm.submit();
-
-            // });
-
-            // $('.btn-clear').click(function(e){
-
-            //     searchForm.empty().submit();
-
-            // });
-
-
+            $('.btn-clear').click(function(e){
+                searchForm.find('input[name="keyword"]').val('');
+                searchForm.find('select[name="type"]').val('');
+                searchForm.submit();
+            });
         </script>
 
 

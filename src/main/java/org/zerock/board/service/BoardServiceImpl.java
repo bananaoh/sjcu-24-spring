@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.zerock.board.dto.BoardDTO;
 import org.zerock.board.entity.Board;
+import org.zerock.board.entity.Member;
 import org.zerock.board.repository.BoardRepository;
 import org.zerock.board.dto.PageResultDTO;
 import org.zerock.board.dto.PageRequestDTO;
@@ -37,10 +38,20 @@ public class BoardServiceImpl implements BoardService{
     }
 
     @Override
-    public PageResultDTO<BoardDTO, Board> getList(PageRequestDTO requestDTO) {
+    public PageResultDTO<BoardDTO, Object[]> getList(PageRequestDTO requestDTO) {
         Pageable pageable = requestDTO.getPageable(Sort.by("bno").descending());
-        Page<Board> result = repository.findAll(pageable);
-        Function<Board, BoardDTO> fn = (entity -> entityToDTO(entity, entity.getWriter(), 0L));
+        
+        Page<Object[]> result = repository.searchPage(
+            requestDTO.getType(),
+            requestDTO.getKeyword(),
+            pageable
+        );
+        
+        Function<Object[], BoardDTO> fn = (arr -> entityToDTO(
+            (Board)arr[0], 
+            (Member)arr[1], 
+            (Long)arr[2])
+        );
         
         return new PageResultDTO<>(result, fn);
     }

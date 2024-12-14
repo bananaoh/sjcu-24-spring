@@ -5,11 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.zerock.board.entity.Board;
-import org.zerock.board.entity.Member;
-import org.zerock.board.entity.QMember;
 import org.zerock.board.repository.MemberRepository;
-import org.zerock.board.service.BoardService;
+import org.zerock.board.entity.QMember;
 
 import com.querydsl.core.BooleanBuilder;
 
