@@ -20,4 +20,8 @@ public class Reply extends BaseEntity {
     private Board board;
     
     private String replyer;
+    
+    public void changeText(String text) {
+        this.text = text;
+    }
 } 

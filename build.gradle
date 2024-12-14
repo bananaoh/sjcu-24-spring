@@ -43,7 +43,6 @@ dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     
-    //테스트버전으로 인한 오류 유의
     testImplementation 'org.junit.platform:junit-platform-launcher:1.9.3'
     
     //mariaDB 연동
@@ -79,4 +78,8 @@ configurations {
         extendsFrom annotationProcessor
     }
     querydsl.extendsFrom compileClasspath
+}
+
+tasks.named('war') {
+    enabled = false
 }

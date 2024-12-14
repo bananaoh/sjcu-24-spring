@@ -21,31 +21,31 @@ import java.util.stream.IntStream;
 @SpringBootTest
 public class BoardRepositoryTests {
 
-    @Autowired
-    private BoardRepository boardRepository;
+	@Autowired
+	private BoardRepository boardRepository;
 
 	/*
 	 * @Test public void insertBoard() {
-	 * 
+	 *
 	 * IntStream.rangeClosed(1,100).forEach(i -> {
-	 * 
+	 *
 	 * Member member = Member.builder().email("user"+i +"@bbb.com").build();
-	 * 
+	 *
 	 * Board board = Board.builder() .title("Title..."+i) .content("Content...." +
 	 * i) .writer(member) .build();
-	 * 
+	 *
 	 * boardRepository.save(board);
-	 * 
+	 *
 	 * });
-	 * 
+	 *
 	 * }
 	 */
 
 
-    @Transactional
-    @Test
-    public void testRead1() {
-    	//조인명령을 활용한다.
+	@Transactional
+	@Test
+	public void testRead1() {
+		//조인명령을 활용한다.
 //        Optional<Board> result = boardRepository.findById(101L); //데이터베이스에 존재하는 번호
 //
 //        Board board = result.get();
@@ -54,9 +54,9 @@ public class BoardRepositoryTests {
 //        System.out.println(board);
 //        System.out.println(board.getWriter());
 
-    }
+	}
 
 
 
-    
+
 }

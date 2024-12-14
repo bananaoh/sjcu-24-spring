@@ -12,19 +12,25 @@ import org.springframework.data.domain.Sort;
 @Data
 public class PageRequestDTO {
 
-    private int page;
-    private int size;
+    @Builder.Default
+    private int page = 1;
     
-    // 검색 관련 필드 추가
+    @Builder.Default
+    private int size = 10;
+    
     private String type;
     private String keyword;
 
-    public PageRequestDTO(){
-        this.page = 1;
-        this.size = 10;
+    public PageRequestDTO() {
+        this(1, 10);
+    }
+    
+    public PageRequestDTO(int page, int size) {
+        this.page = page;
+        this.size = size;
     }
 
-    public Pageable getPageable(Sort sort){
-        return PageRequest.of(page -1, size, sort);
+    public Pageable getPageable(Sort sort) {
+        return PageRequest.of(page - 1, size, sort);
     }
 } 
