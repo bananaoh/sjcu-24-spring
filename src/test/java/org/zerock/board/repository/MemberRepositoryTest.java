@@ -11,7 +11,6 @@ import org.zerock.board.entity.Member;
 
 
 @SpringBootTest
-@EnableJpaAuditing
 public class MemberRepositoryTest {
 	
 	@Autowired
@@ -20,15 +19,15 @@ public class MemberRepositoryTest {
     @Test
     public void insertDummies(){
 
-    	IntStream.rangeClosed(1, 100).forEach(i -> {
-
-            Member member = Member.builder()
-                    .email("user" + i + "@aaa.com")
-                    .pwd("1111")
-                    .name("USER" + i)
-                    .build();
-
-            memberRepository.save(member);
-        });
+//    	IntStream.rangeClosed(1, 100).forEach(i -> {
+//
+//            Member member = Member.builder()
+//                    .email("user" + i + "@aaa.com")
+//                    .pwd("1111")
+//                    .name("USER" + i)
+//                    .build();
+//
+//            memberRepository.save(member);
+//        });
     }
 }

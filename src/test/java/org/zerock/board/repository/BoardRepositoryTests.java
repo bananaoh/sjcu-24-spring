@@ -19,7 +19,6 @@ import java.util.Optional;
 import java.util.stream.IntStream;
 
 @SpringBootTest
-@EnableJpaAuditing
 public class BoardRepositoryTests {
 
     @Autowired
