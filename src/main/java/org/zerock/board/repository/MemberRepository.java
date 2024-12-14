@@ -1,6 +1,7 @@
 package org.zerock.board.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +15,5 @@ import org.zerock.board.entity.Member;
 public interface MemberRepository 
 extends JpaRepository<Member, String>, QuerydslPredicateExecutor<Member>{
 	
- 
+	Optional<Member> findByEmail(String email);
 }

@@ -1,6 +1,6 @@
 package org.zerock.board.repository;
 
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,45 +18,77 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @SpringBootTest
 public class BoardRepositoryTests {
 
 	@Autowired
 	private BoardRepository boardRepository;
 
-	/*
-	 * @Test public void insertBoard() {
-	 *
-	 * IntStream.rangeClosed(1,100).forEach(i -> {
-	 *
-	 * Member member = Member.builder().email("user"+i +"@bbb.com").build();
-	 *
-	 * Board board = Board.builder() .title("Title..."+i) .content("Content...." +
-	 * i) .writer(member) .build();
-	 *
-	 * boardRepository.save(board);
-	 *
-	 * });
-	 *
-	 * }
-	 */
+	@Autowired
+	private MemberRepository memberRepository;
 
-
-	@Transactional
-	@Test
-	public void testRead1() {
-		//조인명령을 활용한다.
-//        Optional<Board> result = boardRepository.findById(101L); //데이터베이스에 존재하는 번호
-//
-//        Board board = result.get();
-//
-//        System.out.println("testRead1()..............");
-//        System.out.println(board);
-//        System.out.println(board.getWriter());
-
+	@BeforeEach
+	public void setUp() {
+		Member member = Member.builder()
+				.email("test@test.com")
+				.name("테스터")
+				.pwd("1234")
+				.build();
+		memberRepository.save(member);
 	}
 
+	@Test
+	public void testInsert() {
+		Member member = Member.builder()
+				.email("test@test.com")
+				.name("테스터")
+				.pwd("1234")
+				.build();
 
+		Board board = Board.builder()
+				.title("테스트 제목")
+				.content("테스트 내용")
+				.writer(member)
+				.build();
 
+		Board savedBoard = boardRepository.save(board);
+		assertNotNull(savedBoard);
+		assertEquals("테스트 제목", savedBoard.getTitle());
+	}
 
+	@Test
+	@Transactional
+	public void testRead() {
+		Member member = memberRepository.findByEmail("test@test.com")
+				.orElseThrow(() -> new RuntimeException("테스트 멤버가 없습니다"));
+
+		Board board = Board.builder()
+				.title("테스트 제목")
+				.content("테스트 내용")
+				.writer(member)
+				.build();
+		
+		Board savedBoard = boardRepository.save(board);
+
+		Optional<Board> result = boardRepository.findById(savedBoard.getBno());
+		
+		assertTrue(result.isPresent());
+		assertEquals("테스트 제목", result.get().getTitle());
+	}
+
+	@Test
+	public void testSearch() {
+		String type = "t";
+		String keyword = "테스트";
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+		
+		Page<Object[]> result = boardRepository.searchPage(type, keyword, pageable);
+		
+		assertNotNull(result);
+		assertTrue(result.getTotalElements() > 0);
+	}
 }

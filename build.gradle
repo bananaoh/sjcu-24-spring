@@ -83,3 +83,7 @@ configurations {
 tasks.named('war') {
     enabled = false
 }
+
+bootWar {
+    mainClass = 'org.zerock.board.Chap13Application'
+}
