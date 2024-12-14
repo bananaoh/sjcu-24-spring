@@ -8,4 +8,5 @@ public interface ReplyService {
     List<ReplyDTO> getList(Long bno);
     void modify(ReplyDTO replyDTO);
     void remove(Long rno);
+    ReplyDTO get(Long rno);
 } 

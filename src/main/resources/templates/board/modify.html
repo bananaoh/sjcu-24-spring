@@ -4,71 +4,92 @@
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
 
     <th:block th:fragment="content">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-3">
+                        <div class="card-body p-5">
+                            <h2 class="display-6 mb-4">게시글 수정</h2>
 
-        <h1 class="mt-4">게시물 수정</h1>
+                            <form action="/board/modify" method="post">
+                                <!-- 페이지 번호 -->
+                                <input type="hidden" name="page" th:value="${requestDTO.page}">
+                                <input type="hidden" name="type" th:value="${requestDTO.type}">
+                                <input type="hidden" name="keyword" th:value="${requestDTO.keyword}">
 
-        <form action="/board/modify" method="post">
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small">게시물 번호</label>
+                                    <input type="text" class="form-control form-control-lg border-0 bg-light" 
+                                           name="bno" th:value="${dto.bno}" readonly>
+                                </div>
 
-            <!--페이지 번호  -->
-            <input type="hidden" name="page" th:value="${requestDTO.page}">
-            <input type="hidden" name="type" th:value="${requestDTO.type}" >
-            <input type="hidden" name="keyword" th:value="${requestDTO.keyword}" >
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small">제목</label>
+                                    <input type="text" class="form-control form-control-lg border-0 bg-light" 
+                                           name="title" th:value="${dto.title}">
+                                </div>
 
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small">내용</label>
+                                    <textarea class="form-control border-0 bg-light" 
+                                              rows="8" name="content" 
+                                              style="resize: none;">[[${dto.content}]]</textarea>
+                                </div>
 
-            <div class="form-group">
-                <label>게시물 번호</label>
-                <input type="text" class="form-control" name="bno" th:value="${dto.bno}" readonly >
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label text-muted small">작성자</label>
+                                        <input type="text" class="form-control border-0 bg-light" 
+                                               name="writer" th:value="${dto.writerEmail}" readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <label class="form-label text-muted small">등록일</label>
+                                        <input type="text" class="form-control border-0 bg-light" 
+                                               th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <label class="form-label text-muted small">수정일</label>
+                                    <input type="text" class="form-control border-0 bg-light" 
+                                           th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
+                                </div>
+                            </form>
+
+                            <div class="flex gap-3 mt-4">
+                                <button type="button" class="btn btn-dark rounded-pill px-4 py-2 modifyBtn">
+                                    <i class="fas fa-check me-2"></i>수정완료
+                                </button>
+                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 py-2 listBtn">
+                                    <i class="fas fa-list me-2"></i>목록으로
+                                </button>
+                                <button type="button" class="btn btn-danger rounded-pill px-4 py-2 removeBtn ms-auto">
+                                    <i class="fas fa-trash me-2"></i>삭제하기
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label>제목</label>
-                <input type="text" class="form-control" name="title" th:value="${dto.title}" >
-            </div>
-            <div class="form-group">
-                <label>내용</label>
-                <textarea class="form-control" rows="5" name="content">[[${dto.content}]]</textarea>
-            </div>
-            <div class="form-group">
-                <label>작성자</label>
-                <input type="text" class="form-control" name="writer" th:value="${dto.writerEmail}" readonly>
-            </div>
-            <div class="form-group">
-                <label>등록일</label>
-                <input type="text" class="form-control" th:value="${#temporals.format(dto.regDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
-            </div>
-            <div class="form-group">
-                <label>수정일</label>
-                <input type="text" class="form-control" th:value="${#temporals.format(dto.modDate, 'yyyy/MM/dd HH:mm:ss')}" readonly>
-            </div>
-
-        </form>
-
-        <button type="button" class="btn btn-primary modifyBtn">수정</button>
-
-        <button type="button" class="btn btn-info listBtn">목록</button>
-
-        <button type="button" class="btn btn-danger removeBtn">삭제</button>
+        </div>
 
         <script th:inline="javascript">
-
-            var actionForm = $("form"); //form 태그 객체
+            var actionForm = $("form");
 
             $(".removeBtn").click(function(){
-
+                if(!confirm("정말 삭제하시겠습니까?")) {
+                    return;
+                }
                 actionForm
                     .attr("action", "/board/remove")
-                    .attr("method","post");
-
-                actionForm.submit();
-
+                    .attr("method","post")
+                    .submit();
             });
 
             $(".modifyBtn").click(function() {
-
-                if(!confirm("수정하시겠습니까?")){
-                    return ;
+                if(!confirm("수정하시겠습니까?")) {
+                    return;
                 }
-
                 actionForm
                     .attr("action", "/board/modify")
                     .attr("method","post")
@@ -76,30 +97,21 @@
             });
 
             $(".listBtn").click(function() {
-
-                //var pageInfo = $("input[name='page']");
                 var page = $("input[name='page']");
                 var type = $("input[name='type']");
                 var keyword = $("input[name='keyword']");
 
-                actionForm.empty(); //form 태그의 모든 내용을 지우고
-
+                actionForm.empty();
                 actionForm.append(page);
                 actionForm.append(type);
                 actionForm.append(keyword);
 
-
                 actionForm
                     .attr("action", "/board/list")
-                    .attr("method","get");
-
-                actionForm.submit();
-
-            })
-
+                    .attr("method","get")
+                    .submit();
+            });
         </script>
-
-
     </th:block>
-
 </th:block>
+</html>

@@ -26,7 +26,6 @@ public class ReplyController {
 
     @PostMapping("")
     public ResponseEntity<Long> register(@RequestBody ReplyDTO replyDTO) {
-        log.info(replyDTO);
         Long rno = replyService.register(replyDTO);
         return new ResponseEntity<>(rno, HttpStatus.OK);
     }
@@ -43,5 +42,11 @@ public class ReplyController {
         log.info(replyDTO);
         replyService.modify(replyDTO);
         return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+    @GetMapping("/{rno}")
+    public ResponseEntity<ReplyDTO> get(@PathVariable("rno") Long rno) {
+        ReplyDTO replyDTO = replyService.get(rno);
+        return new ResponseEntity<>(replyDTO, HttpStatus.OK);
     }
 } 

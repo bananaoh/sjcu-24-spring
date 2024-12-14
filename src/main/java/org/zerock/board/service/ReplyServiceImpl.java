@@ -45,6 +45,12 @@ public class ReplyServiceImpl implements ReplyService {
         replyRepository.deleteById(rno);
     }
 
+    @Override
+    public ReplyDTO get(Long rno) {
+        Reply reply = replyRepository.findById(rno).orElseThrow();
+        return entityToDTO(reply);
+    }
+
     private Reply dtoToEntity(ReplyDTO dto) {
         Board board = Board.builder().bno(dto.getBno()).build();
         

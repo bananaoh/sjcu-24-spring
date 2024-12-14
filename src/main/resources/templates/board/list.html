@@ -4,112 +4,101 @@
 <th:block th:replace="~{/layout/basic :: setContent(~{this::content} )}">
 
     <th:block th:fragment="content">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-4 mb-0">게시판</h1>
+            <a th:href="@{/board/register}">
+                <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                    <i class="fas fa-pen me-2"></i>글쓰기
+                </button>
+            </a>
+        </div>
 
-        <h1 class="mt-4">게시판
-            <span>
-                <a th:href="@{/board/register}">
-                    <button type="button" class="btn btn-outline-primary">글쓰기
-                    </button>
-                </a>
-            </span>
-        </h1>
-
-
-        <form action="/board/list" method="get" id="searchForm">
-            <div class="input-group">
-                <input type="hidden" name="page" value = "1">
-                <div class="input-group-prepend">
-                    <select class="custom-select" name="type">
-                        <option th:selected="${pageRequestDTO.type == null}">-------</option>
-                        <option value="t" th:selected="${pageRequestDTO.type =='t'}" >제목</option>
-                        <option value="c" th:selected="${pageRequestDTO.type =='c'}" >내용</option>
-                        <option value="w" th:selected="${pageRequestDTO.type =='w'}" >작성자</option>
-                        <option value="tc" th:selected="${pageRequestDTO.type =='tc'}" >제목 + 내용</option>
-                        <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}" >제목 + 내용 + 작성자</option>
-                    </select>
-                </div>
-                <input class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}">
-                <div class="input-group-append" id="button-addon4">
-                    <button class="btn btn-outline-secondary btn-search" type="button">검색</button>
-                    <button class="btn btn-outline-secondary btn-clear" type="button">초기화</button>
-                </div>
+        <form action="/board/list" method="get" id="searchForm" class="mb-5">
+            <div class="input-group shadow-sm rounded">
+                <input type="hidden" name="page" value="1">
+                <select class="form-select border-0" name="type" style="max-width: 150px;">
+                    <option th:selected="${pageRequestDTO.type == null}">-</option>
+                    <option value="t" th:selected="${pageRequestDTO.type =='t'}">제목</option>
+                    <option value="c" th:selected="${pageRequestDTO.type =='c'}">내용</option>
+                    <option value="w" th:selected="${pageRequestDTO.type =='w'}">작성자</option>
+                    <option value="tc" th:selected="${pageRequestDTO.type =='tc'}">제목 + 내용</option>
+                    <option value="tcw" th:selected="${pageRequestDTO.type =='tcw'}">전체 검색</option>
+                </select>
+                <input class="form-control border-0" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="검색어를 입력하세요">
+                <button class="btn btn-primary px-4 btn-search" type="button">검색</button>
+                <button class="btn btn-outline-secondary px-4 btn-clear" type="button">초기화</button>
             </div>
         </form>
 
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th scope="col" class="text-center" style="width: 10%">번호</th>
+                            <th scope="col" style="width: 50%">제목</th>
+                            <th scope="col" class="text-center" style="width: 20%">작성자</th>
+                            <th scope="col" class="text-center" style="width: 20%">작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="dto : ${result.dtoList}">
+                            <td class="text-center">[[${dto.bno}]]</td>
+                            <td class="">
+                                <a th:href="@{/board/read(bno = ${dto.bno}, page= ${result.page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}" 
+                                   class="text-decoration-none">
+                                    [[${dto.title}]]
+                                    <span class="badge rounded-pill bg-info text-white fw-normal ms-2"><i class="far fa-comment-dots me-1"></i>[[${dto.replyCount}]]</span>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <span class="fw-bold">[[${dto.writerName}]]</span>
+                                <small class="text-muted d-block">[[${dto.writerEmail}]]</small>
+                            </td>
+                            <td class="text-center text-muted">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
+        <nav class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:if="${result.prev}">
+                    <a class="page-link rounded-pill mx-1 shadow-sm border-0" 
+                       th:href="@{/board/list(page= ${result.start -1}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                       <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col" class="text-center">번호</th>
-                <th scope="col" class="text-center">제목</th>
-                <th scope="col" class="text-center">작성자</th>
-                <th scope="col" class="text-center">작성일</th>
-            </tr>
-            </thead>
-            <tbody>
+                <li th:class=" 'page-item ' + ${result.page == page?'active':''}" th:each="page: ${result.pageList}">
+                    <a class="page-link rounded-pill mx-1 shadow-sm border-0" 
+                       th:href="@{/board/list(page = ${page}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                        [[${page}]]
+                    </a>
+                </li>
 
-            <tr th:each="dto : ${result.dtoList}" >
-                <td scope="row" class="text-center">
-                        [[${dto.bno}]]
-                </td>
-                <td>
-                  <a th:href="@{/board/read(bno = ${dto.bno},
-                  page= ${result.page},
-                  type=${pageRequestDTO.type} ,
-                  keyword = ${pageRequestDTO.keyword})}">
-                  [[${dto.title}]] [<b th:text="${dto.replyCount}"></b>]
-                </a>
-                </td>
-                <td class="text-center">[[${dto.writerName}]] <small>[[${dto.writerEmail}]]</small> </td>
-                <td class="text-center">[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
-            </tr>
+                <li class="page-item" th:if="${result.next}">
+                    <a class="page-link rounded-pill mx-1 shadow-sm border-0" 
+                       th:href="@{/board/list(page= ${result.end + 1}, type=${pageRequestDTO.type}, keyword = ${pageRequestDTO.keyword})}">
+                       <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
-
-
-            </tbody>
-        </table>
-
-        <ul class="pagination h-100 justify-content-center align-items-center">
-
-            <li class="page-item " th:if="${result.prev}">
-                <a class="page-link" th:href="@{/board/list(page= ${result.start -1},
-                    type=${pageRequestDTO.type} ,
-                    keyword = ${pageRequestDTO.keyword} ) }" tabindex="-1">이전</a>
-            </li>
-
-            <li th:class=" 'page-item ' + ${result.page == page?'active':''} " th:each="page: ${result.pageList}">
-                <a class="page-link" th:href="@{/board/list(page = ${page} ,
-                   type=${pageRequestDTO.type} ,
-                   keyword = ${pageRequestDTO.keyword}  )}">
-                    [[${page}]]
-                </a>
-            </li>
-
-            <li class="page-item" th:if="${result.next}">
-                <a class="page-link" th:href="@{/board/list(page= ${result.end + 1} ,
-                    type=${pageRequestDTO.type} ,
-                    keyword = ${pageRequestDTO.keyword} )}">다음</a>
-            </li>
-
-        </ul>
-
-
-        <div class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
+        <div class="modal fade" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow">
+                    <div class="modal-header border-0">
                         <h5 class="modal-title">알림</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <p>메시지가 들어갈 자리입니다.</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <button type="button" class="btn btn-primary">저장</button>
+                    <div class="modal-body"></div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-secondary px-4" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary px-4">확인</button>
                     </div>
                 </div>
             </div>
@@ -129,8 +118,6 @@
             });
         </script>
 
-
-
     </th:block>
-
 </th:block>
+</html>
